@@ -32,6 +32,9 @@ class Article
     #[ORM\ManyToMany(targetEntity: Catalogue::class, mappedBy: 'articles')]
     private Collection $catalogues;
 
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -126,6 +129,18 @@ class Article
         if ($this->catalogues->removeElement($catalogue)) {
             $catalogue->removeArticle($this);
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

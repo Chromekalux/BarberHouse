@@ -58,12 +58,19 @@ class Salon
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Agenda $agenda = null;
+
+    #[ORM\OneToMany(mappedBy: 'salon', targetEntity: Post::class)]
+    private Collection $posts;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->managers = new ArrayCollection();
         $this->employees = new ArrayCollection();
         $this->transferAccounts = new ArrayCollection();
+        $this->posts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -277,6 +284,51 @@ class Salon
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getAgenda(): ?Agenda
+    {
+        return $this->agenda;
+    }
+
+    public function setAgenda(?Agenda $agenda): self
+    {
+        if ($agenda instanceof SalonAgenda)
+            $agenda->setOwner($this);
+
+        $this->agenda = $agenda;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts->add($post);
+            $post->setSalon($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $post): self
+    {
+        if ($this->posts->removeElement($post)) {
+            // set the owning side to null (unless already changed)
+            if ($post->getSalon() === $this) {
+                $post->setSalon(null);
+            }
+        }
 
         return $this;
     }

@@ -15,6 +15,9 @@ It represents the User on the website.
  - bornOn [date_immutable]
  - **role** [string] : The role of the user, the availables roles are: **ROLE_USER**, **ROLE_CUSTOMER**, **ROLE_BARBER**, **ROLE_ADMIN**
  - profilePhoto [image](#image)
+ - agenda [agenda](#agenda)
+ - posts _array of_[post](#post) : The list of posts made by the user
+ - comments _array of_[comment](#comment)
  - salons _array of_ [salon](#salon) : The list of salons owned by the user. This user should have the role **ROLE_BARBER**
  - managedSalon [salon](#salon) : A user can managed the salon of another one
  - workingSalon [salon](#salon) : A user can work in a salon
@@ -36,20 +39,26 @@ Representing a Barber shop, hairdressing salon.
  - owner [user](#user) : The Salon owner by default the creator
  - managers _array of_ [user](#user) : List of user(with **ROLE_BARBER**'s role) that are managing the Salon with the owner
  - employees _array of_ [user](#user)
+ - agenda [agenda](#agenda)
+ - posts _array of_[post](#post) : The list of posts made by the salon
  - transfersAccounts _array of_ [transfer_account](#transfer-account) : List of transfer accounts of the salon
 
 ## Transfer
+
+### Transfer Account
 
 ## Article
 
 ## Catalogue
 
-## Event
-
 ## Subscription Plan
 
-## SubEntities
+## Agenda
+
+## Event
+
+## Post
+
+### Comment
 
 ### Image
-
-### Transfer Account

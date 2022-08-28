@@ -24,10 +24,14 @@ class Image
     #[ORM\ManyToMany(targetEntity: Catalogue::class, mappedBy: 'images')]
     private Collection $catalogues;
 
+    #[ORM\ManyToMany(targetEntity: Post::class, mappedBy: 'images')]
+    private Collection $posts;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
         $this->catalogues = new ArrayCollection();
+        $this->posts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,6 +100,33 @@ class Image
     {
         if ($this->catalogues->removeElement($catalogue)) {
             $catalogue->removeImage($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts->add($post);
+            $post->addImage($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $post): self
+    {
+        if ($this->posts->removeElement($post)) {
+            $post->removeImage($this);
         }
 
         return $this;
